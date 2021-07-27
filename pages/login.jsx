@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import ReCAPTCHA from "react-google-recaptcha";
+import axios from "axios";
 
 function Copyright() {
   return (
@@ -67,6 +68,14 @@ export default function SignInSide() {
     console.log("Recaptcha value: ", value);
   }
 
+  const RecaptchaRef = React.createRef();
+
+  async function loginSubmit(e) {
+    e.preventDefault();
+    if (!RecaptchaRef.current.getValue())
+      return alert("Please fill the captcha");
+  }
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -79,7 +88,7 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={loginSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -102,17 +111,13 @@ export default function SignInSide() {
               id="password"
               autoComplete="current-password"
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
             <ReCAPTCHA
-              sitekey="6LdugbkbAAAAAO8QIlShhzDsvxA3V1zQwO1YjB9f"
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+              ref={RecaptchaRef}
               onChange={onRecaptchaChange}
             />
             <Button
               type="submit"
-              fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
@@ -121,7 +126,7 @@ export default function SignInSide() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="/forgotpassword" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
