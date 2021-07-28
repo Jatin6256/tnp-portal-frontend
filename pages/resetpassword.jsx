@@ -10,8 +10,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Flier from "../src/components/flier";
 import Copyright from "../src/components/copyright";
+import Flier from "../src/components/flier";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 
@@ -37,45 +37,58 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+
+  let token;
+
+  React.useEffect(() => {
+    let url = new URL(window.location.href);
+    token = url.searchParams.get("token");
+    if (!token || token == "")
+      return flier("error", "This link in invalid.", true);
+  }, []);
+
+  const [FlierData, setFlierData] = React.useState({});
   const RecaptchaRef = React.createRef();
-  const [FlierData, setFlierData] = React.useState({
-    hidden: true,
-    type: "error",
-    message: "This is default message",
-  });
+
+  function flier(type, message, keep) {
+    setFlierData({
+      type,
+      message,
+      hidden: false,
+    });
+    if (!keep) setTimeout(() => setFlierData({}), 5000);
+  }
 
   async function onFormSubmit(e) {
     e.preventDefault();
-    const email = document.getElementById("form-email").value;
-    if (!RecaptchaRef.current.getValue())
-      return setFlierData({
-        type: "info",
-        message: "Please fill the reCAPTCHA",
-        hidden: false,
-      });
 
+    const newPassword = e.target.elements["new-password"].value;
+    const confirmPassword = e.target.elements["confirm-password"].value;
+
+    if (newPassword != confirmPassword)
+      return flier("error", "Password doesn't match");
+
+    const regex =
+      "^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$";
+    // See this https://stackoverflow.com/questions/5142103/regex-to-validate-password-strength
+
+    if (!String(newPassword).match(regex))
+      return flier("error", "Password criteria not fulfilled!");
+
+    if (!RecaptchaRef.current.getValue())
+      return flier("info", "Please fill the reCAPTCHA");
     try {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/changePassword`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/uses/resetPassword`,
         {
-          method: "email",
-          email,
           g_recaptcha: RecaptchaRef.current.getValue(),
-          baseUrl: `${window.location.origin}/resetpassword`,
+          token,
+          password: newPassword,
         }
       );
-      setFlierData({
-        hidden: false,
-        message: "Please check your email for further instructions.",
-        type: "success",
-      });
-    } catch (err) {
-      console.log(err);
-      setFlierData({
-        hidden: false,
-        message: err.response.data.msg,
-        type: "error",
-      });
+      return flier("success", "Password changed successfully");
+    } catch (error) {
+      return flier("error", error.response.data.msg);
     }
   }
 
@@ -87,7 +100,7 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Forgot Password
+          Reset Password
         </Typography>
         <form className={classes.form} onSubmit={onFormSubmit}>
           <TextField
@@ -95,11 +108,22 @@ export default function SignIn() {
             margin="normal"
             required
             fullWidth
-            id="form-email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
+            name="new-password"
+            label="New Password"
+            type="password"
+            id="form-new-password"
+            autoComplete="new-password"
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="confirm-password"
+            label="Confirm Password"
+            type="password"
+            id="form-confirm-password"
+            autoComplete="confirm-password"
           />
           <div align="center">
             <ReCAPTCHA
@@ -114,23 +138,21 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
           >
-            Send Confirmation Email
+            Reset Password
           </Button>
           <Grid container>
-            <Grid item xs>
+            <Grid item>
               <Link href="/login" variant="body2">
-                Login
+                {"Login"}
               </Link>
             </Grid>
           </Grid>
         </form>
+        <Flier data={FlierData} />
       </div>
       <Box mt={8}>
         <Copyright />
       </Box>
-      <div>
-        <Flier data={FlierData} />
-      </div>
     </Container>
   );
 }
