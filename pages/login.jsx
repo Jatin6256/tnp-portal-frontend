@@ -11,6 +11,8 @@ import Copyright from "../src/components/copyright";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import Flier from "../src/components/flier";
+import Router from "next/router";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 
@@ -48,10 +50,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignInSide() {
+  React.useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) Router.push("/dashboard");
+  }, []);
   const classes = useStyles();
+  const [FlierData, setFlierData] = React.useState({
+    hidden: true,
+    type: "error",
+    message: "This is default message",
+  });
 
-  function onRecaptchaChange(value) {
-    console.log("Recaptcha value: ", value);
+  function flier(type, message, keep) {
+    setFlierData({
+      type,
+      message,
+      hidden: false,
+    });
+    if (!keep) setTimeout(() => setFlierData({}), 5000);
   }
 
   const RecaptchaRef = React.createRef();
@@ -59,9 +75,30 @@ export default function SignInSide() {
   async function loginSubmit(e) {
     e.preventDefault();
     if (!RecaptchaRef.current.getValue())
-      return alert("Please fill the captcha");
+      return flier("warning", "Please fill the reCAPTCHA");
+
+    const { username, password } = e.target.elements;
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/login`,
+        {
+          username: username.value,
+          password: password.value,
+          g_recaptcha: RecaptchaRef.current.getValue(),
+        }
+      );
+      flier("success", `Welcome ${response.data.username}`);
+      localStorage.setItem("user", JSON.stringify(response.data));
+      localStorage.setItem("token", String(response.data.token));
+      localStorage.setItem("userType", String(response.data.type));
+      Router.push("/dashboard");
+    } catch (err) {
+      flier("error", err.response.data.msg);
+    }
   }
 
+  // TODO: Add remember me (Store username and password and refresh token in background)
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -100,7 +137,6 @@ export default function SignInSide() {
             <ReCAPTCHA
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
               ref={RecaptchaRef}
-              onChange={onRecaptchaChange}
             />
             <Button
               type="submit"
@@ -126,6 +162,7 @@ export default function SignInSide() {
               <Copyright />
             </Box>
           </form>
+          <Flier data={FlierData} />
         </div>
       </Grid>
     </Grid>

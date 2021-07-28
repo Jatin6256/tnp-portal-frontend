@@ -44,15 +44,20 @@ export default function SignIn() {
     message: "This is default message",
   });
 
+  function flier(type, message, keep) {
+    setFlierData({
+      type,
+      message,
+      hidden: false,
+    });
+    if (!keep) setTimeout(() => setFlierData({}), 5000);
+  }
+
   async function onFormSubmit(e) {
     e.preventDefault();
     const email = document.getElementById("form-email").value;
     if (!RecaptchaRef.current.getValue())
-      return setFlierData({
-        type: "info",
-        message: "Please fill the reCAPTCHA",
-        hidden: false,
-      });
+      return flier("info", "Please fill the reCAPTCHA");
 
     try {
       await axios.post(
@@ -64,18 +69,9 @@ export default function SignIn() {
           baseUrl: `${window.location.origin}/resetpassword`,
         }
       );
-      setFlierData({
-        hidden: false,
-        message: "Please check your email for further instructions.",
-        type: "success",
-      });
+      flier("success", "Please check your email for further instructions.");
     } catch (err) {
-      console.log(err);
-      setFlierData({
-        hidden: false,
-        message: err.response.data.msg,
-        type: "error",
-      });
+      flier("error", err.response.data.msg);
     }
   }
 
