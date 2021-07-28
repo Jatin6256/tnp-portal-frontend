@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Router from "next/router";
+import Head from "next/head";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -12,8 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import ReCAPTCHA from "react-google-recaptcha";
-import Copyright from "../src/components/copyright";
-import Flier from "../src/components/flier";
+import Copyright from "../../src/components/copyright";
+import Flier from "../../src/components/flier";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -96,6 +97,9 @@ export default function SignUp() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+        <Head>
+          <title>Sign Up - Company</title>
+        </Head>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -173,6 +177,13 @@ export default function SignUp() {
             <Grid item>
               <Link href="/login" variant="body2">
                 Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="/signup/student" variant="body2">
+                Student Sign Up
               </Link>
             </Grid>
           </Grid>

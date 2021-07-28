@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -77,6 +78,9 @@ export default function SignIn() {
 
   return (
     <Container component="main" maxWidth="xs">
+      <Head>
+        <title>Forgot Password</title>
+      </Head>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>

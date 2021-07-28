@@ -13,11 +13,12 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Flier from "../src/components/flier";
 import Router from "next/router";
+import Head from "next/head";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  main: {
     height: "100vh",
   },
   image: {
@@ -100,7 +101,10 @@ export default function SignInSide() {
 
   // TODO: Add remember me (Store username and password and refresh token in background)
   return (
-    <Grid container component="main" className={classes.root}>
+    <Grid container component="main" className={classes.main}>
+      <Head>
+        <title>Login</title>
+      </Head>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
