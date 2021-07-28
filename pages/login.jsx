@@ -51,8 +51,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   React.useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) Router.push("/dashboard");
+    const token = localStorage.getItem("token");
+    if (token) Router.push("/dashboard");
   }, []);
   const classes = useStyles();
   const [FlierData, setFlierData] = React.useState({
@@ -153,7 +153,7 @@ export default function SignInSide() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

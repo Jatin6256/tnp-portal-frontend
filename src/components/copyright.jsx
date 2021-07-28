@@ -5,8 +5,8 @@ export default function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Training and Placement Cell, IIIT Raichur
+      <Link color="inherit" href="https://tnp.iiitr.ac.in/">
+        <a target="_blank">Training and Placement Cell, IIIT Raichur</a>
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
