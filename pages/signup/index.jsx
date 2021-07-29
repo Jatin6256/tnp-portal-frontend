@@ -89,6 +89,7 @@ export default function SignUp() {
       localStorage.setItem("token", String(response.data.token));
       localStorage.setItem("userType", String(response.data.type));
     } catch (error) {
+      RecaptchaRef.current.reset();
       return flier("error", error.response.data.msg);
     }
   }

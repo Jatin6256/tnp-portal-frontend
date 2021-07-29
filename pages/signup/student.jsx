@@ -17,6 +17,7 @@ import { GoogleLogin } from "react-google-login";
 import Copyright from "../../src/components/copyright";
 import Flier from "../../src/components/flier";
 import axiosUtil from "../../src/utils/axios";
+import toBase64 from "../../src/utils/fileToBase64";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
+    alignContent: "center",
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
@@ -34,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  googleButton: {
     margin: theme.spacing(3, 0, 2),
   },
 }));
@@ -44,9 +49,9 @@ export default function StudentSignUp() {
     if (user) Router.push("/dashboard");
   }, []);
 
-  let GoogleToken;
   const classes = useStyles();
   const [FlierData, setFlierData] = React.useState({});
+  let [GoogleToken, setGoogleToken] = React.useState("");
   const [googleAuthenticated, setGoogleAuthenticated] = React.useState(false);
   const RecaptchaRef = React.createRef();
 
@@ -58,13 +63,6 @@ export default function StudentSignUp() {
     });
     if (!keep) setTimeout(() => setFlierData({}), 5000);
   }
-  const toBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
 
   async function onFormSubmit(e) {
     e.preventDefault();
@@ -98,13 +96,16 @@ export default function StudentSignUp() {
       localStorage.setItem("user", JSON.stringify(response.data));
       localStorage.setItem("token", String(response.data.token));
       localStorage.setItem("userType", String(response.data.type));
+      Router.push("/");
     } catch (error) {
+      RecaptchaRef.current.reset();
       return flier("error", error.response.data.msg);
     }
   }
 
   function responseGoogle(a) {
-    GoogleToken = a.accessToken;
+    setGoogleToken(a.accessToken);
+    console.log(GoogleToken);
     setGoogleAuthenticated(true);
   }
   function responseGoogleError(a) {
@@ -118,23 +119,18 @@ export default function StudentSignUp() {
         <Head>
           <title>Sign Up - Student</title>
         </Head>
-        <div className="google-sign-in" hidden={googleAuthenticated}>
-          <GoogleLogin
-            clientId="655435592747-e1frtp3jenmhoi19g9mcb0jt132o4m16.apps.googleusercontent.com"
-            buttonText="Login with Google"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogleError}
-            cookiePolicy={"single_host_origin"}
-          />
-        </div>
-        <div className="signup-form" hidden={!googleAuthenticated}>
+        <div className="signup-form" align="center">
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Student Sign Up
           </Typography>
-          <form className={classes.form} onSubmit={onFormSubmit}>
+          <form
+            className={classes.form}
+            onSubmit={onFormSubmit}
+            hidden={!googleAuthenticated}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -273,6 +269,19 @@ export default function StudentSignUp() {
             </Grid>
           </form>
           <Flier data={FlierData} />
+          <div
+            className="google-sign-in"
+            className={classes.googleButton}
+            hidden={googleAuthenticated}
+          >
+            <GoogleLogin
+              clientId="655435592747-e1frtp3jenmhoi19g9mcb0jt132o4m16.apps.googleusercontent.com"
+              buttonText="Login with Google"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogleError}
+              cookiePolicy={"single_host_origin"}
+            />
+          </div>
         </div>
       </div>
       <Box mt={5}>

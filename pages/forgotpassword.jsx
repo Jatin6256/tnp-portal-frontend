@@ -72,7 +72,8 @@ export default function SignIn() {
       );
       flier("success", "Please check your email for further instructions.");
     } catch (err) {
-      flier("error", err.response.data.msg);
+      RecaptchaRef.current.reset();
+      return flier("error", err.response.data.msg);
     }
   }
 

@@ -55,6 +55,7 @@ export default function SignInSide() {
     const token = localStorage.getItem("token");
     if (token) Router.push("/dashboard");
   }, []);
+
   const classes = useStyles();
   const [FlierData, setFlierData] = React.useState({
     hidden: true,
@@ -95,7 +96,8 @@ export default function SignInSide() {
       localStorage.setItem("userType", String(response.data.type));
       Router.push("/dashboard");
     } catch (err) {
-      flier("error", err.response.data.msg);
+      RecaptchaRef.current.reset();
+      return flier("error", err.response.data.msg);
     }
   }
 

@@ -13,8 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Copyright from "../src/components/copyright";
 import Flier from "../src/components/flier";
-import ReCAPTCHA from "react-google-recaptcha";
-import axios from "axios";
+import axiosUtil from "../src/utils/axios";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,17 +38,18 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
 
-  let token;
+  let [token, setToken] = React.useState(null);
 
   React.useEffect(() => {
     let url = new URL(window.location.href);
-    token = url.searchParams.get("token");
-    if (!token || token == "")
+    console.log(url.searchParams.get("token"));
+    const temp = url.searchParams.get("token");
+    setToken(url.searchParams.get("token"));
+    if (!temp || temp == "")
       return flier("error", "This link in invalid.", true);
   }, []);
 
   const [FlierData, setFlierData] = React.useState({});
-  const RecaptchaRef = React.createRef();
 
   function flier(type, message, keep) {
     setFlierData({
@@ -69,24 +69,11 @@ export default function SignIn() {
     if (newPassword != confirmPassword)
       return flier("error", "Password doesn't match");
 
-    const regex =
-      "^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$";
-    // See this https://stackoverflow.com/questions/5142103/regex-to-validate-password-strength
-
-    if (!String(newPassword).match(regex))
-      return flier("error", "Password criteria not fulfilled!");
-
-    if (!RecaptchaRef.current.getValue())
-      return flier("info", "Please fill the reCAPTCHA");
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/uses/resetPassword`,
-        {
-          g_recaptcha: RecaptchaRef.current.getValue(),
-          token,
-          password: newPassword,
-        }
-      );
+      await axiosUtil("/users/resetPassword", "post", {
+        token,
+        password: newPassword,
+      });
       return flier("success", "Password changed successfully");
     } catch (error) {
       return flier("error", error.response.data.msg);
@@ -96,7 +83,7 @@ export default function SignIn() {
   return (
     <Container component="main" maxWidth="xs">
       <Head>
-        <title>Forgot Password</title>
+        <title>Reset Password</title>
       </Head>
       <CssBaseline />
       <div className={classes.paper}>
@@ -127,14 +114,8 @@ export default function SignIn() {
             label="Confirm Password"
             type="password"
             id="form-confirm-password"
-            autoComplete="confirm-password"
+            autoComplete="new-password"
           />
-          <div align="center">
-            <ReCAPTCHA
-              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-              ref={RecaptchaRef}
-            />
-          </div>
           <Button
             type="submit"
             fullWidth

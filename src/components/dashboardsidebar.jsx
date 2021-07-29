@@ -8,10 +8,10 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import { Home, Menu } from "@material-ui/icons";
 import { grey } from "@material-ui/core/colors";
+import Router from "next/router";
+import axiosUtil from "../../src/utils/axios";
 
 const useStyles = makeStyles({
   list: {
@@ -45,6 +45,17 @@ export default function SwipeableTemporaryDrawer() {
     setState(open);
   };
 
+  async function logout() {
+    const token = localStorage.getItem("token");
+    try {
+      await axiosUtil("/users/logout", "get", {}, {}, token);
+    } catch (err) {}
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("userType");
+    Router.push("/");
+  }
+
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -64,7 +75,7 @@ export default function SwipeableTemporaryDrawer() {
       </List>
       <Divider />
       <List>
-        <ListItem button>
+        <ListItem button onClick={logout}>
           <ListItemIcon>
             <Home />
           </ListItemIcon>
@@ -85,7 +96,7 @@ export default function SwipeableTemporaryDrawer() {
           <Menu />
         </Button>
         <SwipeableDrawer
-          anchor="left"
+          anchor={anchor}
           open={state}
           onClose={toggleDrawer(anchor, false)}
           onOpen={toggleDrawer(anchor, true)}
