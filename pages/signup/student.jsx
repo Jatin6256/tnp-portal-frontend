@@ -269,11 +269,7 @@ export default function StudentSignUp() {
             </Grid>
           </form>
           <Flier data={FlierData} />
-          <div
-            className="google-sign-in"
-            className={classes.googleButton}
-            hidden={googleAuthenticated}
-          >
+          <div className={classes.googleButton} hidden={googleAuthenticated}>
             <GoogleLogin
               clientId="655435592747-e1frtp3jenmhoi19g9mcb0jt132o4m16.apps.googleusercontent.com"
               buttonText="Login with Google"
