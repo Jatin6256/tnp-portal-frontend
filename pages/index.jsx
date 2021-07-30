@@ -30,7 +30,7 @@ export default function Dashboard() {
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        const r = await axiosUtil("/users/profileExists", "get", {}, {}, token);
+        const r = await axiosUtil("/users/profileExists", "get", token);
         const userType = localStorage.getItem("userType");
         userType == "COMPANY" && Router.push("dashboard/company");
         userType == "STUDENT" && Router.push("dashboard/student");

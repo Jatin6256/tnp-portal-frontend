@@ -1,6 +1,7 @@
 import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
+import { CircularProgress } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Router from "next/router";
@@ -45,6 +46,7 @@ export default function SignUp() {
 
   const classes = useStyles();
   const [FlierData, setFlierData] = React.useState({});
+  var [loading, setLoading] = React.useState(false);
   const RecaptchaRef = React.createRef();
 
   function flier(type, message, keep) {
@@ -69,6 +71,10 @@ export default function SignUp() {
     if (!RecaptchaRef.current.getValue())
       return flier("info", "Please fill the reCAPTCHA");
 
+    const captchaValue = RecaptchaRef.current.getValue();
+    RecaptchaRef.current.reset();
+    setLoading(true);
+
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/users/signup`,
@@ -77,7 +83,7 @@ export default function SignUp() {
           email: email.value,
           type: "COMPANY",
           password,
-          g_recaptcha: RecaptchaRef.current.getValue(),
+          g_recaptcha: captchaValue,
         }
       );
       flier(
@@ -88,8 +94,10 @@ export default function SignUp() {
       localStorage.setItem("user", JSON.stringify(response.data));
       localStorage.setItem("token", String(response.data.token));
       localStorage.setItem("userType", String(response.data.type));
+      setLoading(false);
     } catch (error) {
-      RecaptchaRef.current.reset();
+      // RecaptchaRef.current.reset();
+      setLoading(false);
       return flier("error", error.response.data.msg);
     }
   }
@@ -165,15 +173,25 @@ export default function SignUp() {
               </div>
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
+          {loading && (
+            <div align="center">
+              <CircularProgress
+                style={{ padding: 10, margin: 20 }}
+                color="white"
+              />
+            </div>
+          )}
+          {!loading && (
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign Up
+            </Button>
+          )}
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="/login" variant="body2">

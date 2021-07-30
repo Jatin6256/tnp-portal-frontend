@@ -8,6 +8,7 @@ import {
   Box,
   Grid,
   Typography,
+  CircularProgress,
 } from "@material-ui/core";
 import Link from "../src/components/Link";
 import Copyright from "../src/components/copyright";
@@ -81,6 +82,7 @@ export default function SignInSide() {
   }
 
   const RecaptchaRef = React.createRef();
+  var [loading, setLoading] = React.useState(false);
 
   async function loginSubmit(e) {
     e.preventDefault();
@@ -88,6 +90,9 @@ export default function SignInSide() {
       return flier("warning", "Please fill the reCAPTCHA");
 
     const { username, password } = e.target.elements;
+    const g_recaptcha = RecaptchaRef.current.getValue();
+    RecaptchaRef.current.reset();
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -95,7 +100,7 @@ export default function SignInSide() {
         {
           username: username.value,
           password: password.value,
-          g_recaptcha: RecaptchaRef.current.getValue(),
+          g_recaptcha,
         }
       );
       flier("success", `Welcome ${response.data.username}`);
@@ -103,8 +108,9 @@ export default function SignInSide() {
       localStorage.setItem("token", String(response.data.token));
       localStorage.setItem("userType", String(response.data.type));
       Router.push("/");
+      setLoading(false);
     } catch (err) {
-      RecaptchaRef.current.reset();
+      setLoading(false);
       return flier("error", err.response.data.msg);
     }
   }
@@ -162,14 +168,22 @@ export default function SignInSide() {
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
               ref={RecaptchaRef}
             />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Sign In
-            </Button>
+            {loading && (
+              <CircularProgress
+                style={{ padding: 10, margin: 20 }}
+                color="white"
+              />
+            )}
+            {!loading && (
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                <Typography variant="body2">Sign in</Typography>
+              </Button>
+            )}
             <Grid container>
               <Grid item xs>
                 <Link href="/forgotpassword" variant="body2">

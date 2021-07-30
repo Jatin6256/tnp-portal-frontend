@@ -4,6 +4,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Link from "../src/components/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
   const RecaptchaRef = React.createRef();
+  var [loading, setLoading] = React.useState(false);
   const [FlierData, setFlierData] = React.useState({
     hidden: true,
     type: "error",
@@ -59,6 +61,9 @@ export default function SignIn() {
     const email = document.getElementById("form-email").value;
     if (!RecaptchaRef.current.getValue())
       return flier("info", "Please fill the reCAPTCHA");
+    const g_recaptcha = RecaptchaRef.current.getValue();
+    RecaptchaRef.current.reset();
+    setLoading(true);
 
     try {
       await axios.post(
@@ -66,13 +71,14 @@ export default function SignIn() {
         {
           method: "email",
           email,
-          g_recaptcha: RecaptchaRef.current.getValue(),
+          g_recaptcha,
           baseUrl: `${window.location.origin}/resetpassword`,
         }
       );
       flier("success", "Please check your email for further instructions.");
+      setLoading(false);
     } catch (err) {
-      RecaptchaRef.current.reset();
+      setLoading(false);
       return flier("error", err.response.data.msg);
     }
   }
@@ -108,19 +114,29 @@ export default function SignIn() {
               ref={RecaptchaRef}
             />
           </div>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Send Confirmation Email
-          </Button>
+          {loading && (
+            <div align="center">
+              <CircularProgress
+                style={{ padding: 10, margin: 20 }}
+                color="white"
+              />
+            </div>
+          )}
+          {!loading && (
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Send Confirmation Email
+            </Button>
+          )}
           <Grid container>
             <Grid item xs>
               <Link href="/login" variant="body2">
-                Login
+                Gotcha? Login instead
               </Link>
             </Grid>
           </Grid>

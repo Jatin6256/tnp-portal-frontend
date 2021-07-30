@@ -4,6 +4,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Link from "../src/components/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -39,6 +40,8 @@ export default function SignIn() {
   const classes = useStyles();
 
   let [token, setToken] = React.useState(null);
+  const [FlierData, setFlierData] = React.useState({});
+  var [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     let url = new URL(window.location.href);
@@ -48,8 +51,6 @@ export default function SignIn() {
     if (!temp || temp == "")
       return flier("error", "This link in invalid.", true);
   }, []);
-
-  const [FlierData, setFlierData] = React.useState({});
 
   function flier(type, message, keep) {
     setFlierData({
@@ -69,13 +70,17 @@ export default function SignIn() {
     if (newPassword != confirmPassword)
       return flier("error", "Password doesn't match");
 
+    setLoading(true);
+
     try {
-      await axiosUtil("/users/resetPassword", "post", {
+      await axiosUtil("/users/resetPassword", "post", null, {
         token,
         password: newPassword,
       });
+      setLoading(false);
       return flier("success", "Password changed successfully");
     } catch (error) {
+      setLoading(false);
       return flier("error", error.response.data.msg);
     }
   }
@@ -116,15 +121,25 @@ export default function SignIn() {
             id="form-confirm-password"
             autoComplete="new-password"
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Reset Password
-          </Button>
+          {loading && (
+            <div align="center">
+              <CircularProgress
+                style={{ padding: 10, margin: 20 }}
+                color="white"
+              />
+            </div>
+          )}
+          {!loading && (
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Reset Password
+            </Button>
+          )}
           <Grid container>
             <Grid item>
               <Link href="/login" variant="body2">

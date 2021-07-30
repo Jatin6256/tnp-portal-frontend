@@ -8,7 +8,8 @@ import axios from "axios";
  * @param {String} token Authorization token
  *
  */
-export default function axiosUtil(url, method, data, headers, token) {
+export default function axiosUtil(url, method, token, data, headers) {
+  if (!headers) headers = {};
   if (token) headers["Authorization"] = `Bearer ${token}`;
   return axios({
     method,

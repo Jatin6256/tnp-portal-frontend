@@ -70,9 +70,9 @@ export default function CreateProfile() {
       await axiosUtil(
         "/metadata/company",
         "post",
+        localStorage.getItem("token"),
         data,
-        {},
-        localStorage.getItem("token")
+        {}
       );
       flier("success", `Your profile is created successfully.`);
     } catch (error) {
