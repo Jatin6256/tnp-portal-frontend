@@ -1,6 +1,7 @@
+import React from "react";
 import Router from "next/router";
 
 export default function DashboardHome() {
-  Router.push("profile");
+  React.useEffect(() => Router.push("profile"));
   return <div />;
 }

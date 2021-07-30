@@ -50,7 +50,7 @@ export default function BasicTable(props) {
               <TableCell align="left">{key}</TableCell>
               <TableCell align="left">
                 {isURL(data[key]) ? (
-                  <a href={data[key]} target="_blank">
+                  <a href={data[key]} target="_blank" rel="noreferrer">
                     {data[key]}
                   </a>
                 ) : (

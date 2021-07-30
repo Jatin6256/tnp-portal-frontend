@@ -46,20 +46,7 @@ export default function Profile() {
     if (token) {
       try {
         const res = await axiosUtil("/metadata/students", "get", token);
-        setProfileData({
-          "First Name": res.data.fName,
-          "Last Name": res.data.lName,
-          Address: res.data.address,
-          "Roll Number": res.data.roll,
-          Email: res.data.email,
-          "Phone Number": res.data.phone,
-          Department: res.data.department,
-          Year: res.data.year,
-          CGPA: res.data.cgpa,
-          "Semester till CGPA is provided": res.data.semTillCGPA,
-          "Resume Link": res.data.resume,
-          "Profile Verified": res.data.verified ? "true" : "false",
-        });
+        setProfileData(res.data);
         setLoading(false);
       } catch (err) {
         flier(
