@@ -95,6 +95,7 @@ export default function SignUp() {
       localStorage.setItem("token", String(response.data.token));
       localStorage.setItem("userType", String(response.data.type));
       setLoading(false);
+      setTimeout(() => Router.push("/"), 10 * 1000);
     } catch (error) {
       // RecaptchaRef.current.reset();
       setLoading(false);
