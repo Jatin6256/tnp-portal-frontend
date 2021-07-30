@@ -1,10 +1,31 @@
 import Router from "next/router";
 import React from "react";
 import axiosUtil from "../src/utils/axios";
-import styles from "../styles/index.module.css";
-import { LinearProgress } from "@material-ui/core";
+import { LinearProgress, Typography, makeStyles } from "@material-ui/core";
+
+const style = makeStyles((theme) => {
+  return {
+    boldHeadline: {
+      fontWeight: 600,
+    },
+    container: {
+      width: "100vw",
+      height: "100vh",
+      display: "flex",
+      alignItems: "left",
+      justifyContent: "center",
+      flexDirection: "column",
+      "& > * + *": {
+        width: "100%",
+        padding: 2,
+        margin: "10px 0px",
+      },
+    },
+  };
+});
 
 export default function Dashboard() {
+  const classes = style();
   React.useEffect(async () => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -29,9 +50,11 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <h1>Redirecting you to your destiny</h1>
-      <LinearProgress />
+    <div className={classes.container}>
+      <Typography color="primary" variant="h4" className={classes.boldHeadline}>
+        Redirecting you to your destiny
+      </Typography>
+      <LinearProgress color="secondary" />
     </div>
   );
 }

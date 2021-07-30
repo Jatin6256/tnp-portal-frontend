@@ -5,7 +5,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Router from "next/router";
 import Head from "next/head";
-import Link from "@material-ui/core/Link";
+import Link from "../../src/components/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 export default function StudentSignUp() {
   React.useEffect(() => {
     const user = localStorage.getItem("user");
-    if (user) Router.push("/dashboard");
+    if (user) Router.push("/");
   }, []);
 
   const classes = useStyles();
@@ -260,24 +260,24 @@ export default function StudentSignUp() {
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="/login" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
           </form>
           <Flier data={FlierData} />
           <div className={classes.googleButton} hidden={googleAuthenticated}>
             <GoogleLogin
-              clientId="655435592747-e1frtp3jenmhoi19g9mcb0jt132o4m16.apps.googleusercontent.com"
+              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
               buttonText="Login with Google"
               onSuccess={responseGoogle}
               onFailure={responseGoogleError}
               cookiePolicy={"single_host_origin"}
             />
           </div>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="/login" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
         </div>
       </div>
       <Box mt={5}>

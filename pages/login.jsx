@@ -1,35 +1,43 @@
 import React from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  Paper,
+  Box,
+  Grid,
+  Typography,
+} from "@material-ui/core";
+import Link from "../src/components/Link";
 import Copyright from "../src/components/copyright";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Flier from "../src/components/flier";
 import Router from "next/router";
+import Image from "next/image";
 import Head from "next/head";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
+import logo from "../public/tnp.svg";
 
 const useStyles = makeStyles((theme) => ({
   main: {
     height: "100vh",
   },
   image: {
-    backgroundImage: "url(https://source.unsplash.com/random)",
-    backgroundRepeat: "no-repeat",
-    backgroundColor:
-      theme.palette.type === "light"
-        ? theme.palette.grey[50]
-        : theme.palette.grey[900],
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    "& > * + *": {
+      margin: 20,
+      color: "white",
+    },
+    backgroundColor: theme.palette.primary.main,
+    display: "flex",
+    "@media (max-width: 600px)": {
+      display: "none",
+    },
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -53,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignInSide() {
   React.useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) Router.push("/dashboard");
+    if (token) Router.push("/");
   }, []);
 
   const classes = useStyles();
@@ -94,7 +102,7 @@ export default function SignInSide() {
       localStorage.setItem("user", JSON.stringify(response.data));
       localStorage.setItem("token", String(response.data.token));
       localStorage.setItem("userType", String(response.data.type));
-      Router.push("/dashboard");
+      Router.push("/");
     } catch (err) {
       RecaptchaRef.current.reset();
       return flier("error", err.response.data.msg);
@@ -108,7 +116,17 @@ export default function SignInSide() {
         <title>Login</title>
       </Head>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={false} sm={4} md={7} className={classes.image}>
+        <div className={classes.image}>
+          <Image src={logo} width={200} height={200} alt="TNP IIITR"></Image>
+          <Typography component="h1" variant="h4" color="primary">
+            Training and Placement Cell
+          </Typography>
+          <Typography component="h1" variant="body1">
+            Indian Institute of Information Technology Raichur
+          </Typography>
+        </div>
+      </Grid>
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>

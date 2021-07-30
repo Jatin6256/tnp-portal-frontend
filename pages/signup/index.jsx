@@ -5,7 +5,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Router from "next/router";
 import Head from "next/head";
-import Link from "@material-ui/core/Link";
+import Link from "../../src/components/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   React.useEffect(() => {
     const user = localStorage.getItem("user");
-    if (user) Router.push("/dashboard");
+    if (user) Router.push("/");
   }, []);
 
   const classes = useStyles();

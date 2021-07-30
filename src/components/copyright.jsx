@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import Link from "next/link";
+import Link from "./Link";
 
 export default function Copyright() {
   return (
