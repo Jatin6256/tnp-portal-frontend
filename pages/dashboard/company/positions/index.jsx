@@ -7,8 +7,18 @@ import { makeStyles } from "@material-ui/styles";
 import axiosUtil from "../../../../src/utils/axios";
 import Flier from "../../../../src/components/flier";
 import Listing from "../../../../src/components/list";
+import Button from "@material-ui/core/Button";
+import PositionForm from "../../../../src/components/positionform";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    margin: theme.spacing(1),
+    "& > * + *": {
+      margin: theme.spacing(3, 0),
+    },
+  },
+  paper: {},
   loader: {
     width: "100%",
     height: "100%",
@@ -21,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Positions() {
   const classes = useStyles();
   const [positionsData, setPositionsData] = React.useState([]);
+  const [openForm, setOpenForm] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [FlierData, setFlierData] = React.useState({
     hidden: true,
@@ -43,7 +54,7 @@ export default function Positions() {
       if (token) {
         try {
           const response = await axiosUtil("/metadata/positions", "get", token),
-            positions = Array(response.data.positions[0]);
+            positions = response.data.positions;
           var data = [];
           positions.forEach((position) => {
             data.push({
@@ -54,7 +65,7 @@ export default function Positions() {
               POC: position.pocName,
             });
           });
-          setPositionsData(data[0]);
+          setPositionsData(data);
           setLoading(false);
         } catch (err) {
           console.log(err);
@@ -70,6 +81,7 @@ export default function Positions() {
     };
     fetchData();
   }, []);
+
   return (
     <div>
       <Head>
@@ -77,7 +89,18 @@ export default function Positions() {
       </Head>
       <SideMenu userType="COMPANY">
         {!loading && (
-          <Listing data={positionsData} button={{ text: "View" }}></Listing>
+          <div className={classes.root}>
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setOpenForm(true)}
+              >
+                New
+              </Button>
+            </div>
+            <Listing data={positionsData} button={{ text: "View" }}></Listing>
+          </div>
         )}
         {loading && (
           <div className={classes.loader}>
@@ -85,6 +108,11 @@ export default function Positions() {
           </div>
         )}
       </SideMenu>
+      <PositionForm
+        open={openForm}
+        flier={flier}
+        handleClose={() => setOpenForm(false)}
+      />
       <Flier data={FlierData}></Flier>
     </div>
   );
