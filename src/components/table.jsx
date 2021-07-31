@@ -30,7 +30,6 @@ export default function BasicTable(props) {
   const classes = useStyles();
   const data = props.data;
   const keys = Object.keys(data);
-  console.log(keys);
 
   function isURL(data) {
     try {

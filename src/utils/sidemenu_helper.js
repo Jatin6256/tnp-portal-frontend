@@ -13,6 +13,17 @@ const logout = async (e) => {
   Router.push("/");
 };
 
+const profile = (type) => {
+  type == "STUDENT" && Router.push("/dashboard/student/profile");
+  type == "COMPANY" && Router.push("/dashboard/company/profile");
+};
+
+const positions = (type) => {
+  type == "COMPANY" && Router.push("/dashboard/company/positions");
+};
+
 module.exports = {
   logout,
+  profile,
+  positions,
 };

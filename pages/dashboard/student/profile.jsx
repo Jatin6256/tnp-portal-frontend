@@ -65,41 +65,44 @@ export default function Profile() {
     if (!keep) setTimeout(() => setFlierData({}), 5000);
   }
 
-  React.useEffect(async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const res = await axiosUtil("/metadata/students", "get", token);
-        setProfileData({
-          "First Name": res.data.fName,
-          "Last Name": res.data.lName,
-          Address: res.data.address,
-          "Roll Number": String(res.data.roll).toUpperCase(),
-          Email: res.data.email,
-          "Phone Number": res.data.phone,
-          Department: res.data.department,
-          Year: res.data.year,
-          CGPA: res.data.cgpa,
-          "Semester till CGPA is provided": res.data.semTillCGPA,
-          "Resume Link": res.data.resume,
-          "Profile Verified": res.data.verified ? "Yes" : "No",
-        });
-        const user = JSON.parse(localStorage.getItem("user"));
-        user.name = `${res.data.fName} ${res.data.lName}`;
-        setUser(user);
-        setLoading(false);
-      } catch (err) {
-        flier(
-          "error",
-          (err.response && err.response.data.msg) || err.message,
-          true
-        );
-        console.log(err);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const res = await axiosUtil("/metadata/students", "get", token);
+          setProfileData({
+            "First Name": res.data.fName,
+            "Last Name": res.data.lName,
+            Address: res.data.address,
+            "Roll Number": String(res.data.roll).toUpperCase(),
+            Email: res.data.email,
+            "Phone Number": res.data.phone,
+            Department: res.data.department,
+            Year: res.data.year,
+            CGPA: res.data.cgpa,
+            "Semester till CGPA is provided": res.data.semTillCGPA,
+            "Resume Link": res.data.resume,
+            "Profile Verified": res.data.verified ? "Yes" : "No",
+          });
+          const user = JSON.parse(localStorage.getItem("user"));
+          user.name = `${res.data.fName} ${res.data.lName}`;
+          setUser(user);
+          setLoading(false);
+        } catch (err) {
+          flier(
+            "error",
+            (err.response && err.response.data.msg) || err.message,
+            true
+          );
+          console.log(err);
+        }
+      } else {
+        localStorage.removeItem("token");
+        Router.push("/");
       }
-    } else {
-      localStorage.removeItem("token");
-      Router.push("/");
-    }
+    };
+    fetchData();
   }, []);
 
   return (
@@ -107,7 +110,7 @@ export default function Profile() {
       <Head>
         <title>Profile</title>
       </Head>
-      <SideMenu>
+      <SideMenu userType="STUDENT">
         {loading && (
           <div className={classes.loader}>
             <CircularProgress />

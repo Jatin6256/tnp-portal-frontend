@@ -17,8 +17,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import TelegramIcon from "@material-ui/icons/Telegram";
 import Functions from "../utils/sidemenu_helper";
 import Router from "next/router";
 
@@ -90,6 +89,7 @@ export default function MiniDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const userType = props.userType;
 
   React.useEffect(() => {
     if (!localStorage.getItem("token")) Router.push("/");
@@ -153,12 +153,28 @@ export default function MiniDrawer(props) {
         </div>
         <Divider />
         <List>
-          <ListItem button key="Profile">
+          <ListItem
+            button
+            key="Profile"
+            onClick={() => Functions.profile(userType)}
+          >
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListItem>
+          {userType === "COMPANY" && (
+            <ListItem
+              button
+              key="Positions"
+              onClick={() => Functions.positions(userType)}
+            >
+              <ListItemIcon>
+                <TelegramIcon />
+              </ListItemIcon>
+              <ListItemText primary="Positions" />
+            </ListItem>
+          )}
         </List>
         <Divider />
         <List>

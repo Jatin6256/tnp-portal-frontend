@@ -26,27 +26,30 @@ const style = makeStyles((theme) => {
 
 export default function Dashboard() {
   const classes = style();
-  React.useEffect(async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const r = await axiosUtil("/users/profileExists", "get", token);
-        const userType = localStorage.getItem("userType");
-        userType == "COMPANY" && Router.push("dashboard/company");
-        userType == "STUDENT" && Router.push("dashboard/student");
-      } catch (err) {
-        if (err.response) {
-          if (err.response.status == 405)
-            Router.push("dashboard/createProfile");
-          if (err.response.status == 401) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            localStorage.removeItem("userType");
-            Router.push("/login");
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          await axiosUtil("/users/profileExists", "get", token);
+          const userType = localStorage.getItem("userType");
+          userType == "COMPANY" && Router.push("dashboard/company");
+          userType == "STUDENT" && Router.push("dashboard/student");
+        } catch (err) {
+          if (err.response) {
+            if (err.response.status == 405)
+              Router.push("dashboard/createProfile");
+            if (err.response.status == 401) {
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+              localStorage.removeItem("userType");
+              Router.push("/login");
+            }
           }
         }
-      }
-    } else Router.push("/login");
+      } else Router.push("/login");
+    };
+    fetchData();
   }, []);
 
   return (
