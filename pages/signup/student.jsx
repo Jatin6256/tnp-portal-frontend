@@ -118,14 +118,14 @@ export default function StudentSignUp() {
       <CssBaseline />
       <div className={classes.paper}>
         <Head>
-          <title>Sign Up - Student</title>
+          <title>Sign Up - Students</title>
         </Head>
         <div className="signup-form" align="center">
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Student Sign Up
+            Sign Up - Students
           </Typography>
           <form
             className={classes.form}

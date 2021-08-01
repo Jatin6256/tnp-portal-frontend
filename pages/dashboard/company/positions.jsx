@@ -1,14 +1,15 @@
 import React from "react";
-import SideMenu from "../../../../src/components/dashboardsidebar";
+import SideMenu from "../../../src/components/dashboardsidebar";
 import Head from "next/head";
 import Router from "next/router";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/styles";
-import axiosUtil from "../../../../src/utils/axios";
-import Flier from "../../../../src/components/flier";
-import Listing from "../../../../src/components/list";
+import axiosUtil from "../../../src/utils/axios";
+import Flier from "../../../src/components/flier";
+import Listing from "../../../src/components/list";
 import Button from "@material-ui/core/Button";
-import PositionForm from "../../../../src/components/positionform";
+import PositionForm from "../../../src/components/company/positionform";
+import PositionDialog from "../../../src/components/company/positiondialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +32,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Positions() {
   const classes = useStyles();
   const [positionsData, setPositionsData] = React.useState([]);
+  const [positionsDataComplete, setPositionsDataComplete] = React.useState([]);
   const [openForm, setOpenForm] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [currentPosition, setCurrentPosition] = React.useState({});
   const [loading, setLoading] = React.useState(true);
   const [FlierData, setFlierData] = React.useState({
     hidden: true,
@@ -55,6 +59,7 @@ export default function Positions() {
         try {
           const response = await axiosUtil("/metadata/positions", "get", token),
             positions = response.data.positions;
+          setPositionsDataComplete(positions);
           var data = [];
           positions.forEach((position) => {
             data.push({
@@ -62,7 +67,7 @@ export default function Positions() {
               Name: position.name,
               Type: position.type,
               Location: position.location,
-              POC: position.pocName,
+              Status: position.status,
             });
           });
           setPositionsData(data);
@@ -82,6 +87,19 @@ export default function Positions() {
     fetchData();
   }, []);
 
+  /** @type {React.MouseEventHandler<HTMLButtonElement>} */
+  function handlePositionView(e, id) {
+    e.preventDefault();
+    setCurrentPosition(
+      positionsDataComplete.filter((position) => {
+        return position.id === id;
+      })[0]
+    );
+
+    console.log(positionsDataComplete);
+    setOpenDialog(true);
+  }
+
   return (
     <div>
       <Head>
@@ -99,7 +117,10 @@ export default function Positions() {
                 New
               </Button>
             </div>
-            <Listing data={positionsData} button={{ text: "View" }}></Listing>
+            <Listing
+              data={positionsData}
+              button={{ text: "View", onClick: handlePositionView }}
+            ></Listing>
           </div>
         )}
         {loading && (
@@ -114,6 +135,11 @@ export default function Positions() {
         handleClose={() => setOpenForm(false)}
       />
       <Flier data={FlierData}></Flier>
+      <PositionDialog
+        open={openDialog}
+        handleClose={() => setOpenDialog(false)}
+        data={currentPosition}
+      />
     </div>
   );
 }

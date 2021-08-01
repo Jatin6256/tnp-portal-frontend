@@ -14,29 +14,24 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 export default function BasicTable(props) {
   const classes = useStyles();
   const data = props.data;
   const keys = Object.keys(data);
 
-  function isURL(data) {
+  function parse(data) {
     try {
       var url = new URL(data);
-      return true;
+      return (
+        <a href={data} target="_blank" rel="noreferrer">
+          {data}
+        </a>
+      );
     } catch (err) {
-      return false;
+      const email =
+        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+      if (email.test(data)) return <a href={`mailto:${data}`}>{data}</a>;
+      return data;
     }
   }
 
@@ -47,15 +42,7 @@ export default function BasicTable(props) {
           {keys.map((key) => (
             <TableRow key={key}>
               <TableCell align="left">{key}</TableCell>
-              <TableCell align="left">
-                {isURL(data[key]) ? (
-                  <a href={data[key]} target="_blank" rel="noreferrer">
-                    {data[key]}
-                  </a>
-                ) : (
-                  data[key]
-                )}
-              </TableCell>
+              <TableCell align="left">{parse(data[key])}</TableCell>
             </TableRow>
           ))}
         </TableBody>

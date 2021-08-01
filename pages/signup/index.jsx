@@ -97,7 +97,6 @@ export default function SignUp() {
       setLoading(false);
       setTimeout(() => Router.push("/"), 10 * 1000);
     } catch (error) {
-      // RecaptchaRef.current.reset();
       setLoading(false);
       return flier("error", error.response.data.msg);
     }
@@ -114,7 +113,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Sign up - Company
         </Typography>
         <form className={classes.form} onSubmit={onFormSubmit}>
           <Grid container spacing={2}>

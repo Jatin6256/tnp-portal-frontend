@@ -28,10 +28,6 @@ export default function Listing(props) {
     return <div></div>;
   }
 
-  function buttonAction(id) {
-    Router.push(`${Router.pathname}/${id}`);
-  }
-
   function parse(data) {
     try {
       var url = new URL(data);
@@ -41,6 +37,9 @@ export default function Listing(props) {
         </a>
       );
     } catch (err) {
+      const email =
+        /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+      if (email.test(data)) return <a href={`mailto:${data}`}>{data}</a>;
       return data;
     }
   }
@@ -70,7 +69,7 @@ export default function Listing(props) {
                 {button && (
                   <TableCell key={item.id} align="left">
                     <Button
-                      onClick={() => buttonAction(item.id)}
+                      onClick={(e) => button.onClick(e, item.id)}
                       variant="contained"
                       color="primary"
                     >
