@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     minWidth: "80vw",
     maxWidth: "1200px",
+    zIndex: 2000000,
   },
 }));
 

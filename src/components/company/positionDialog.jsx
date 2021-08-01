@@ -1,19 +1,29 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
+import { Button, Box, DialogActions } from "@material-ui/core";
+import { Dialog, DialogContent, Paper, Divider } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
+import DataTable from "../table";
+import axiosUtil from "../../../src/utils/axios";
 
 const useStyles = makeStyles((theme) => ({
+  paper: {
+    margin: theme.spacing(3),
+    paddingBottom: theme.spacing(6),
+    "& > * + *": {
+      margin: "20px !important",
+    },
+  },
+  root: {
+    "& > * + *": {
+      margin: 20,
+    },
+  },
   appBar: {
     position: "relative",
   },
@@ -21,15 +31,66 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     flex: 1,
   },
+  flex: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  closePosition: {
+    backgroundColor: "red",
+    color: "white",
+  },
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({ open, handleClose, data }) {
+export default function FullScreenDialog({ open, flier, handleClose, data }) {
   const classes = useStyles();
   var [changed, setChanged] = React.useState(false);
+  const openPosition = data.status === "OPEN";
+  var tableData = {
+    Type: data.type,
+    "Total Hires": data.hires,
+    Location: data.location,
+    Duration: data.duration,
+    Salary: data.salary,
+    "Minimum CGPA": data.minCGPA,
+    "PPO Available": data.ppoAvailable,
+    "POC Name": data.pocName,
+    "POC Phone": data.pocPhone,
+    "POC Email": data.pocEmail,
+  };
+
+  async function handleClosePosition(e) {
+    const confirmed = confirm(
+      "Are you sure. Candidates can't register after this."
+    );
+
+    if (confirmed) {
+      console.log("Closing position:", data.id);
+      try {
+        await axiosUtil(
+          "/metadata/positions",
+          "put",
+          localStorage.getItem("token"),
+          {
+            positionId: data.id,
+            change: { status: "CLOSED" },
+          }
+        );
+        return flier("success", "Position is set to `CLOSED`");
+      } catch (err) {
+        return flier(
+          "error",
+          (err.response && err.response.data.msg) || err.message
+        );
+      }
+    }
+  }
+
+  console.log(data);
 
   return (
     <Dialog
@@ -58,6 +119,38 @@ export default function FullScreenDialog({ open, handleClose, data }) {
           )}
         </Toolbar>
       </AppBar>
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+          <DialogContent>
+            <Box m={1}>
+              <div className={classes.flex}>
+                <Typography variant="h3">{data.name}</Typography>
+                {openPosition && (
+                  <Button
+                    className={classes.closePosition}
+                    variant="contained"
+                    onClick={handleClosePosition}
+                  >
+                    Close this position
+                  </Button>
+                )}
+              </div>
+            </Box>
+            <Divider />
+            <Box m={3}>
+              <Typography variant="body1">{data.description}</Typography>
+            </Box>
+            <Box m={3}>
+              <DataTable data={tableData} />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="outlined" color="primary">
+              Get Registered Students
+            </Button>
+          </DialogActions>
+        </Paper>
+      </div>
     </Dialog>
   );
 }

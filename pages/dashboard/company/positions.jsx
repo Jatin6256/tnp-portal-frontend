@@ -9,7 +9,7 @@ import Flier from "../../../src/components/flier";
 import Listing from "../../../src/components/list";
 import Button from "@material-ui/core/Button";
 import PositionForm from "../../../src/components/company/positionform";
-import PositionDialog from "../../../src/components/company/positiondialog";
+import PositionDialog from "../../../src/components/company/positionDialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -96,7 +96,6 @@ export default function Positions() {
       })[0]
     );
 
-    console.log(positionsDataComplete);
     setOpenDialog(true);
   }
 
@@ -136,6 +135,7 @@ export default function Positions() {
       />
       <Flier data={FlierData}></Flier>
       <PositionDialog
+        flier={flier}
         open={openDialog}
         handleClose={() => setOpenDialog(false)}
         data={currentPosition}

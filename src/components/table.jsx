@@ -4,7 +4,6 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
@@ -39,12 +38,15 @@ export default function BasicTable(props) {
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
         <TableBody>
-          {keys.map((key) => (
-            <TableRow key={key}>
-              <TableCell align="left">{key}</TableCell>
-              <TableCell align="left">{parse(data[key])}</TableCell>
-            </TableRow>
-          ))}
+          {keys.map(
+            (key) =>
+              data[key] && (
+                <TableRow key={key}>
+                  <TableCell align="left">{key}</TableCell>
+                  <TableCell align="left">{parse(data[key])}</TableCell>
+                </TableRow>
+              )
+          )}
         </TableBody>
       </Table>
     </TableContainer>
