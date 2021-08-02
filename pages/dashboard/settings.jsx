@@ -119,7 +119,7 @@ export default function Profile() {
       <Head>
         <title>Settings</title>
       </Head>
-      <SideMenu userType="STUDENT">
+      <SideMenu userType={user.type}>
         {loading && (
           <div className={classes.loader}>
             <CircularProgress />
