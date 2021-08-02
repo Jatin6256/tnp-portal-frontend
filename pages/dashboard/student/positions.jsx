@@ -102,7 +102,7 @@ export default function Positions() {
       <Head>
         <title>Positions</title>
       </Head>
-      <SideMenu userType="COMPANY">
+      <SideMenu userType="STUDENT">
         {!loading && (
           <div className={classes.root}>
             <Listing

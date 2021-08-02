@@ -8,6 +8,7 @@ import {
   Typography,
   Avatar,
   Button,
+  Paper,
 } from "@material-ui/core";
 import axiosUtil from "../../src/utils/axios";
 import fileToBase64 from "../../src/utils/fileToBase64";
@@ -149,6 +150,11 @@ export default function Profile() {
             <Typography color="primary" variant="h4">
               {user.username}
             </Typography>
+            {/* <Paper>
+              <Typography color="error" variant="h6">
+                Change Password
+              </Typography>
+            </Paper> */}
           </div>
         )}
       </SideMenu>
