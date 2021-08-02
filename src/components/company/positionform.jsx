@@ -101,18 +101,17 @@ export default function PositionForm(props) {
         </DialogContentText>
         <form onSubmit={handleSubmit} className={classes.form}>
           <TextField
-            autoFocus
             id="form-name"
             name="name"
             label="Title"
             type="text"
+            autoFocus
             autoComplete="off"
             fullWidth
             required
             variant="outlined"
           />
           <TextField
-            autoFocus
             id="form-description"
             name="description"
             label="Description"
@@ -123,7 +122,6 @@ export default function PositionForm(props) {
             variant="outlined"
           />
           <TextField
-            autoFocus
             id="form-hires"
             name="hires"
             label="No. of hires"
@@ -134,7 +132,6 @@ export default function PositionForm(props) {
             variant="outlined"
           />
           <TextField
-            autoFocus
             id="form-location"
             name="location"
             label="Location"
@@ -160,7 +157,6 @@ export default function PositionForm(props) {
           </FormControl>
           {intern && (
             <TextField
-              autoFocus
               id="form-duration"
               name="duration"
               label="Duration (in weeks)"
@@ -173,7 +169,6 @@ export default function PositionForm(props) {
           )}
           {intern && (
             <TextField
-              autoFocus
               id="form-salary"
               name="salary"
               label="Salary"
@@ -185,7 +180,6 @@ export default function PositionForm(props) {
             />
           )}
           <TextField
-            autoFocus
             id="form-minCGPA"
             name="minCGPA"
             label="Minimum CGPA"
@@ -199,7 +193,6 @@ export default function PositionForm(props) {
             variant="outlined"
           />
           <TextField
-            autoFocus
             id="form-forBatch"
             name="forBatch"
             label="For students of batch started in"

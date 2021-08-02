@@ -3,9 +3,9 @@ import axios from "axios";
 /**
  * @param {String} url Path relative to baseUrl
  * @param {String} method Request method
+ * @param {String} token Authorization token
  * @param {Object.<String, String>} data Data to pass
  * @param {Object.<String, String>} headers Additional headers to pass
- * @param {String} token Authorization token
  *
  */
 export default function axiosUtil(url, method, token, data, headers) {

@@ -100,6 +100,7 @@ export default function SignIn() {
         </Typography>
         <form className={classes.form} onSubmit={onFormSubmit}>
           <TextField
+            autoFocus
             variant="outlined"
             margin="normal"
             required

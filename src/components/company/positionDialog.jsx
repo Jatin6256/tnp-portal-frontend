@@ -10,6 +10,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import DataTable from "../table";
 import axiosUtil from "../../../src/utils/axios";
+import exportFromJSON from "export-from-json";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -69,7 +70,6 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
     );
 
     if (confirmed) {
-      console.log("Closing position:", data.id);
       try {
         await axiosUtil(
           "/metadata/positions",
@@ -90,7 +90,52 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
     }
   }
 
-  console.log(data);
+  async function handleGetDataClick(format, e) {
+    let students;
+    try {
+      const response = await axiosUtil(
+        `/manager/position/students?positionId=${data.id}`,
+        "get",
+        localStorage.getItem("token")
+      );
+      students = response.data.students;
+      if (students.length === 0) return flier("error", "No data available");
+    } catch (err) {
+      return flier(
+        "error",
+        (err.response && err.response.data.msg) || err.message
+      );
+    }
+    let url = "";
+    try {
+      if (format == "xls") {
+        const xls = exportFromJSON({
+          data: students,
+          exportType: exportFromJSON.types.xls,
+          fileName: `${data.name}-${Date.now()}`,
+        });
+      } else if (format == "csv") {
+        const csv = exportFromJSON({
+          data: students,
+          exportType: exportFromJSON.types.csv,
+          fileName: `${data.name}-${Date.now()}`,
+        });
+      } else if (format == "json") {
+        const blob = new Blob([JSON.stringify(students)], {
+          type: "text/json",
+        });
+        url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.setAttribute("download", `${data.name}-${Date.now()}.${format}`);
+        a.setAttribute("href", url);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    } catch (err) {
+      return flier("error", err.message);
+    }
+  }
 
   return (
     <Dialog
@@ -144,11 +189,32 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
               <DataTable data={tableData} />
             </Box>
           </DialogContent>
-          <DialogActions>
-            <Button variant="outlined" color="primary">
-              Get Registered Students
-            </Button>
-          </DialogActions>
+          {!openPosition && (
+            <DialogActions>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={(e) => handleGetDataClick("xls", e)}
+              >
+                Get Registered Students as XLSX
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={(e) => handleGetDataClick("json", e)}
+              >
+                Get Registered Students as JSON
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={(e) => handleGetDataClick("csv", e)}
+              >
+                Get Registered Students as CSV
+              </Button>
+              <input hidden type="button" />
+            </DialogActions>
+          )}
         </Paper>
       </div>
     </Dialog>
