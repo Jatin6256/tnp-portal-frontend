@@ -27,9 +27,14 @@ const settings = (type) => {
   Router.push("/dashboard/settings");
 };
 
+const enrolledPositions = (type) => {
+  type == "STUDENT" && Router.push("/dashboard/student/enrolledPositions");
+};
+
 module.exports = {
   logout,
   profile,
   positions,
   settings,
+  enrolledPositions,
 };

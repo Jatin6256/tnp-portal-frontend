@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import PersonIcon from "@material-ui/icons/Person";
+import AdjustIcon from "@material-ui/icons/Adjust";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -174,6 +175,18 @@ export default function MiniDrawer(props) {
             </ListItemIcon>
             <ListItemText primary="Positions" />
           </ListItem>
+          {userType === "STUDENT" && (
+            <ListItem
+              button
+              key="Enrolled Positions"
+              onClick={() => Functions.enrolledPositions(userType)}
+            >
+              <ListItemIcon>
+                <AdjustIcon />
+              </ListItemIcon>
+              <ListItemText primary="Enrolled Positions" />
+            </ListItem>
+          )}
         </List>
         <Divider />
         <List>

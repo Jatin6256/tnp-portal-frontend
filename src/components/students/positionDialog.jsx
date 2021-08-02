@@ -42,7 +42,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({ open, flier, handleClose, data }) {
+export default function FullScreenDialog({
+  open,
+  flier,
+  handleClose,
+  data,
+  enrolledPage,
+}) {
   const classes = useStyles();
   var tableData = {
     Type: data.type,
@@ -111,13 +117,15 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleEnrollPosition}
-            >
-              Enroll for this position
-            </Button>
+            {!enrolledPage && (
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleEnrollPosition}
+              >
+                Enroll for this position
+              </Button>
+            )}
           </DialogActions>
         </Paper>
       </div>
