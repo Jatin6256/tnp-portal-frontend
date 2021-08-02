@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import DataTable from "../table";
+import Listing from "../list";
 import axiosUtil from "../../../src/utils/axios";
 import exportFromJSON from "export-from-json";
 
@@ -49,7 +50,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function FullScreenDialog({ open, flier, handleClose, data }) {
   const classes = useStyles();
-  var [changed, setChanged] = React.useState(false);
+  var [changed, setChanged] = React.useState(false); // For editing position
+  var [openData, setOpenData] = React.useState(false);
+  var [dataInBrowserData, setDataInBrowserData] = React.useState([]);
   const openPosition = data.status === "OPEN";
   var tableData = {
     Type: data.type,
@@ -106,7 +109,20 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
         (err.response && err.response.data.msg) || err.message
       );
     }
-    let url = "";
+    students.forEach((student) => {
+      delete student.createdAt;
+      delete student.updatedAt;
+      delete student.studentId;
+      delete student.positionId;
+      delete student.studentPosJunc;
+      delete student.id;
+      delete student.eligibleForPlacement;
+      delete student.eligibleForInternship;
+      delete student.verified;
+      delete student.comment;
+      delete student.semTillCGPA;
+      delete student.id;
+    });
     try {
       if (format == "xls") {
         const xls = exportFromJSON({
@@ -124,13 +140,16 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
         const blob = new Blob([JSON.stringify(students)], {
           type: "text/json",
         });
-        url = URL.createObjectURL(blob);
+        const url = URL.createObjectURL(blob);
         var a = document.createElement("a");
         a.setAttribute("download", `${data.name}-${Date.now()}.${format}`);
         a.setAttribute("href", url);
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+      } else if (format === "browser") {
+        setDataInBrowserData(students);
+        setOpenData(true);
       }
     } catch (err) {
       return flier("error", err.message);
@@ -189,7 +208,7 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
               <DataTable data={tableData} />
             </Box>
           </DialogContent>
-          {!openPosition && (
+          {openPosition && (
             <DialogActions>
               <Button
                 variant="outlined"
@@ -212,11 +231,50 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
               >
                 Get Registered Students as CSV
               </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={(e) => handleGetDataClick("browser", e)}
+              >
+                Get Registered Students in Browser
+              </Button>
               <input hidden type="button" />
             </DialogActions>
           )}
         </Paper>
       </div>
+      <Dialog
+        fullScreen
+        open={openData}
+        onClose={() => setOpenData(false)}
+        TransitionComponent={Transition}
+      >
+        <AppBar className={classes.appBar}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() => setOpenData(false)}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              Enrolled Students
+            </Typography>
+            {changed && (
+              <Button
+                autoFocus
+                color="inherit"
+                onClick={() => setOpenData(false)}
+              >
+                Cancel
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+        <Listing data={dataInBrowserData} />
+      </Dialog>
     </Dialog>
   );
 }
