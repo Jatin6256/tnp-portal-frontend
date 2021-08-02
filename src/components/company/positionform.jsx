@@ -66,6 +66,7 @@ export default function PositionForm(props) {
       data[key] = value;
     });
     data.type = positionType;
+    data.status = "OPEN";
 
     try {
       const token = localStorage.getItem("token");
