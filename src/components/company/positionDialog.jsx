@@ -208,7 +208,7 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
               <DataTable data={tableData} />
             </Box>
           </DialogContent>
-          {openPosition && (
+          {!openPosition && (
             <DialogActions>
               <Button
                 variant="outlined"
@@ -239,42 +239,42 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
                 Get Registered Students in Browser
               </Button>
               <input hidden type="button" />
+              <Dialog
+                fullScreen
+                open={openData}
+                onClose={() => setOpenData(false)}
+                TransitionComponent={Transition}
+              >
+                <AppBar className={classes.appBar}>
+                  <Toolbar>
+                    <IconButton
+                      edge="start"
+                      color="inherit"
+                      onClick={() => setOpenData(false)}
+                      aria-label="close"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                    <Typography variant="h6" className={classes.title}>
+                      Enrolled Students
+                    </Typography>
+                    {changed && (
+                      <Button
+                        autoFocus
+                        color="inherit"
+                        onClick={() => setOpenData(false)}
+                      >
+                        Cancel
+                      </Button>
+                    )}
+                  </Toolbar>
+                </AppBar>
+                <Listing data={dataInBrowserData} />
+              </Dialog>
             </DialogActions>
           )}
         </Paper>
       </div>
-      <Dialog
-        fullScreen
-        open={openData}
-        onClose={() => setOpenData(false)}
-        TransitionComponent={Transition}
-      >
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={() => setOpenData(false)}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Enrolled Students
-            </Typography>
-            {changed && (
-              <Button
-                autoFocus
-                color="inherit"
-                onClick={() => setOpenData(false)}
-              >
-                Cancel
-              </Button>
-            )}
-          </Toolbar>
-        </AppBar>
-        <Listing data={dataInBrowserData} />
-      </Dialog>
     </Dialog>
   );
 }
