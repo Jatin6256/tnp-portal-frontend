@@ -12,6 +12,7 @@ import IconButton from "@material-ui/core/IconButton";
 import PersonIcon from "@material-ui/icons/Person";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import MenuIcon from "@material-ui/icons/Menu";
+import SettingsIcon from "@material-ui/icons/Settings";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
@@ -181,6 +182,12 @@ export default function MiniDrawer(props) {
               <ExitToAppIcon />
             </ListItemIcon>
             <ListItemText primary="Logout" />
+          </ListItem>
+          <ListItem button key="Settings" onClick={Functions.settings}>
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
           </ListItem>
         </List>
       </Drawer>
