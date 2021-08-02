@@ -163,18 +163,16 @@ export default function MiniDrawer(props) {
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListItem>
-          {userType === "COMPANY" && (
-            <ListItem
-              button
-              key="Positions"
-              onClick={() => Functions.positions(userType)}
-            >
-              <ListItemIcon>
-                <TelegramIcon />
-              </ListItemIcon>
-              <ListItemText primary="Positions" />
-            </ListItem>
-          )}
+          <ListItem
+            button
+            key="Positions"
+            onClick={() => Functions.positions(userType)}
+          >
+            <ListItemIcon>
+              <TelegramIcon />
+            </ListItemIcon>
+            <ListItemText primary="Positions" />
+          </ListItem>
         </List>
         <Divider />
         <List>

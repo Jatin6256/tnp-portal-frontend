@@ -20,6 +20,7 @@ const profile = (type) => {
 
 const positions = (type) => {
   type == "COMPANY" && Router.push("/dashboard/company/positions");
+  type == "STUDENT" && Router.push("/dashboard/student/positions");
 };
 
 module.exports = {
