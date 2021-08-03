@@ -1,6 +1,8 @@
 import axiosUtil from "../utils/axios";
 import Router from "next/router";
 
+const isStudent = () => localStorage.getItem("userType") === "STUDENT";
+
 const logout = async (e) => {
   console.log("Logout");
   const token = localStorage.getItem("token");
@@ -13,22 +15,22 @@ const logout = async (e) => {
   Router.push("/");
 };
 
-const profile = (type) => {
-  type == "STUDENT" && Router.push("/dashboard/student/profile");
-  type == "COMPANY" && Router.push("/dashboard/company/profile");
+const profile = () => {
+  !isStudent() && Router.push("/dashboard/company/profile");
+  isStudent() && Router.push("/dashboard/student/profile");
 };
 
-const positions = (type) => {
-  type == "COMPANY" && Router.push("/dashboard/company/positions");
-  type == "STUDENT" && Router.push("/dashboard/student/positions");
+const positions = () => {
+  !isStudent() && Router.push("/dashboard/company/positions");
+  isStudent() && Router.push("/dashboard/student/positions");
 };
 
-const settings = (type) => {
+const settings = () => {
   Router.push("/dashboard/settings");
 };
 
-const enrolledPositions = (type) => {
-  type == "STUDENT" && Router.push("/dashboard/student/enrolledPositions");
+const enrolledPositions = () => {
+  isStudent() && Router.push("/dashboard/student/enrolledPositions");
 };
 
 module.exports = {

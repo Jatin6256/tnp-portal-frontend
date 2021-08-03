@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+// import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 import Head from "next/head";
 import Router from "next/router";
@@ -7,7 +7,8 @@ import { useState } from "react";
 import { LinearProgress } from "@material-ui/core";
 
 function MyApp({ Component, pageProps }) {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  // const prefersDarkMode = localStorage.getItem("theme");
+  // TODO: can be used to set theme. Add the switch in settings for theme choice and use here
   const [loader, setLoader] = useState(false);
 
   Router.events.on("routeChangeStart", (e) => setLoader(true));
@@ -16,24 +17,13 @@ function MyApp({ Component, pageProps }) {
 
   const theme = createTheme({
     palette: {
-      primary: {
-        // light: palette.primary[300],
-        main: "#060c46",
-        // dark: palette.primary[700],
-        // contrastText: getContrastText(palette.primary[500]),
-      },
-      secondary: {
-        //   light: palette.secondary.A200,
-        main: "#4AD892",
-        //   dark: palette.secondary.A700,
-        //   contrastText: getContrastText(palette.secondary.A400),
-      },
-      // error: {
-      //   light: palette.error[300],
-      //   main: palette.error[500],
-      //   dark: palette.error[700],
-      //   contrastText: getContrastText(palette.error[500]),
-      // },
+      type: "light",
+      primary: { main: "#060c46" },
+      secondary: { main: "#4AD892" },
+      error: { main: "#e57373" },
+      warning: { main: "#ffb74d" },
+      info: { main: "#64b5f6" },
+      success: { main: "#81c784" },
     },
     typography: {
       fontFamily: "Poppins",

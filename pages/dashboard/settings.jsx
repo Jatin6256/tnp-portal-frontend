@@ -8,8 +8,13 @@ import {
   Typography,
   Avatar,
   Button,
-  Paper,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Dialog,
 } from "@material-ui/core";
+import ReCAPTCHA from "react-google-recaptcha";
 import axiosUtil from "../../src/utils/axios";
 import fileToBase64 from "../../src/utils/fileToBase64";
 import Flier from "../../src/components/flier";
@@ -33,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     "& > * + *": {
-      margin: 10,
+      margin: theme.spacing(3),
     },
   },
   large: {
@@ -43,13 +48,23 @@ const useStyles = makeStyles((theme) => ({
   secondary: {
     backgroundColor: theme.palette.secondary.main,
   },
+  redButton: {
+    backgroundColor: "red",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#e65353",
+    },
+  },
 }));
 
 export default function Profile() {
   const classes = useStyles();
   const [loading, setLoading] = React.useState(true);
   const AvatarInputRef = React.createRef();
+  const currentPassword = React.createRef();
+  const RecaptchaRef = React.createRef();
   const [user, setUser] = React.useState({});
+  const [changePassword, setChangePassword] = React.useState(true);
   const [FlierData, setFlierData] = React.useState({
     hidden: true,
     type: "error",
@@ -114,12 +129,44 @@ export default function Profile() {
     fetchData();
   }, []);
 
+  async function passwordRequest(e) {
+    e.preventDefault();
+    if (!RecaptchaRef.current.getValue())
+      return flier("warning", "Please fill the reCAPTCHA");
+
+    const g_recaptcha = RecaptchaRef.current.getValue();
+    RecaptchaRef.current.reset();
+
+    const password = e.target.elements["password"].value;
+    try {
+      const accessToken = localStorage.getItem("token");
+      const response = await axiosUtil(
+        "/users/changePassword",
+        "post",
+        accessToken,
+        {
+          method: "password",
+          password,
+          g_recaptcha,
+        }
+      );
+      const { token } = response.data.token;
+      Router.push(`/resetpassword?token=${token}`);
+    } catch (err) {
+      return flier(
+        "error",
+        (err.response && err.response.data.msg) || err.message,
+        true
+      );
+    }
+  }
+
   return (
     <div className={classes.root}>
       <Head>
         <title>Settings</title>
       </Head>
-      <SideMenu userType={user.type}>
+      <SideMenu>
         {loading && (
           <div className={classes.loader}>
             <CircularProgress />
@@ -147,14 +194,56 @@ export default function Profile() {
               accept="image/*"
               type="file"
             ></input>
-            <Typography color="primary" variant="h4">
-              {user.username}
+            <Typography color="primary" variant="h6">
+              <b>Username</b>: {user.username}
+              <br />
+              <b>Email</b>: {user.email}
             </Typography>
-            {/* <Paper>
-              <Typography color="error" variant="h6">
-                Change Password
-              </Typography>
-            </Paper> */}
+            <Button
+              className={classes.redButton}
+              onClick={() => setChangePassword(true)}
+            >
+              Change Password
+            </Button>
+            <Dialog
+              maxWidth="xs"
+              fullWidth
+              open={changePassword}
+              onClose={() => setChangePassword(false)}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle>Change Password</DialogTitle>
+              <DialogContent>
+                <form onSubmit={passwordRequest}>
+                  <TextField
+                    autoFocus
+                    ref={currentPassword}
+                    id="form-password"
+                    name="password"
+                    label="Current Password"
+                    type="password"
+                    autoComplete="password"
+                    fullWidth
+                    required
+                  />
+                  <ReCAPTCHA
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                    ref={RecaptchaRef}
+                  />
+                  <DialogActions>
+                    <Button
+                      onClick={() => setChangePassword(false)}
+                      color="primary"
+                    >
+                      Cancel
+                    </Button>
+                    <Button color="primary" variant="contained" type="submit">
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
         )}
       </SideMenu>

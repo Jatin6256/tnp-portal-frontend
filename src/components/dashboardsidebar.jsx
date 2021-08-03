@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
+import { Drawer, Tooltip } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
@@ -155,53 +155,64 @@ export default function MiniDrawer(props) {
         </div>
         <Divider />
         <List>
-          <ListItem
-            button
-            key="Profile"
-            onClick={() => Functions.profile(userType)}
-          >
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
-          <ListItem
-            button
-            key="Positions"
-            onClick={() => Functions.positions(userType)}
-          >
-            <ListItemIcon>
-              <TelegramIcon />
-            </ListItemIcon>
-            <ListItemText primary="Positions" />
-          </ListItem>
-          {userType === "STUDENT" && (
+          <Tooltip title="Profile" placement="right">
             <ListItem
               button
-              key="Enrolled Positions"
-              onClick={() => Functions.enrolledPositions(userType)}
+              alt="Profile"
+              key="Profile"
+              onClick={() => Functions.profile(userType)}
             >
               <ListItemIcon>
-                <AdjustIcon />
+                <PersonIcon />
               </ListItemIcon>
-              <ListItemText primary="Enrolled Positions" />
+              <ListItemText primary="Profile" />
             </ListItem>
+          </Tooltip>
+          <Tooltip title="Positions - Live" placement="right">
+            <ListItem
+              button
+              key="Positions - Live"
+              onClick={() => Functions.positions(userType)}
+            >
+              <ListItemIcon>
+                <TelegramIcon />
+              </ListItemIcon>
+              <ListItemText primary="Positions - Live" />
+            </ListItem>
+          </Tooltip>
+          {userType === "STUDENT" && (
+            <Tooltip title="Enrolled Positions" placement="right">
+              <ListItem
+                button
+                key="Enrolled Positions"
+                onClick={() => Functions.enrolledPositions(userType)}
+              >
+                <ListItemIcon>
+                  <AdjustIcon />
+                </ListItemIcon>
+                <ListItemText primary="Enrolled Positions" />
+              </ListItem>
+            </Tooltip>
           )}
         </List>
         <Divider />
         <List>
-          <ListItem button key="Logout" onClick={Functions.logout}>
-            <ListItemIcon>
-              <ExitToAppIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItem>
-          <ListItem button key="Settings" onClick={Functions.settings}>
-            <ListItemIcon>
-              <SettingsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Settings" />
-          </ListItem>
+          <Tooltip title="Logout" placement="right">
+            <ListItem button key="Logout" onClick={Functions.logout}>
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItem>
+          </Tooltip>
+          <Tooltip title="Settings" placement="right">
+            <ListItem button key="Settings" onClick={Functions.settings}>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
+            </ListItem>
+          </Tooltip>
         </List>
       </Drawer>
       <main className={classes.content}>
