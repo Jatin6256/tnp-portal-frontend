@@ -64,7 +64,7 @@ export default function Profile() {
   const currentPassword = React.createRef();
   const RecaptchaRef = React.createRef();
   const [user, setUser] = React.useState({});
-  const [changePassword, setChangePassword] = React.useState(true);
+  const [changePassword, setChangePassword] = React.useState(false);
   const [FlierData, setFlierData] = React.useState({
     hidden: true,
     type: "error",

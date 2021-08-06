@@ -91,10 +91,11 @@ export default function MiniDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const userType = props.userType;
+  var userType;
 
   React.useEffect(() => {
     if (!localStorage.getItem("token")) Router.push("/");
+    userType = localStorage.getItem("userType");
   }, []);
 
   const handleDrawerOpen = () => {
