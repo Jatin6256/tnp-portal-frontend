@@ -71,10 +71,10 @@ export default function StudentSignUp() {
     const confirmPassword = e.target.elements["confirm-password"].value;
 
     if (password != confirmPassword)
-      return flier("error", "Password doesn't match");
+      return flier("error", "Password doesn't match ❌");
 
     if (!RecaptchaRef.current.getValue())
-      return flier("info", "Please fill the reCAPTCHA");
+      return flier("warning", "Please fill the reCAPTCHA 🥺");
 
     var formData = new FormData(e.target);
     var data = {};

@@ -3,7 +3,7 @@ import Router from "next/router";
 
 const isStudent = () => localStorage.getItem("userType") === "STUDENT";
 
-const logout = async (e) => {
+const logout = async () => {
   console.log("Logout");
   const token = localStorage.getItem("token");
   try {
@@ -12,7 +12,7 @@ const logout = async (e) => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   localStorage.removeItem("userType");
-  Router.push("/");
+  Router.push("/login");
 };
 
 const profile = () => {

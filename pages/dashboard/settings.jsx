@@ -92,7 +92,7 @@ export default function Profile() {
       await axiosUtil("/users/avatar", "put", token, { avatar });
       return flier(
         "success",
-        "Avatar updated successfully. Effect can be seen on next login."
+        "Avatar updated successfully 😻. Effect can be seen on next login 🍿."
       );
     } catch (err) {
       return flier(
@@ -132,7 +132,7 @@ export default function Profile() {
   async function passwordRequest(e) {
     e.preventDefault();
     if (!RecaptchaRef.current.getValue())
-      return flier("warning", "Please fill the reCAPTCHA");
+      return flier("warning", "Please fill the reCAPTCHA 🥺");
 
     const g_recaptcha = RecaptchaRef.current.getValue();
     RecaptchaRef.current.reset();

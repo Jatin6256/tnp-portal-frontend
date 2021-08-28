@@ -49,7 +49,7 @@ export default function SignIn() {
     const temp = url.searchParams.get("token");
     setToken(url.searchParams.get("token"));
     if (!temp || temp == "")
-      return flier("error", "This link in invalid.", true);
+      return flier("error", "This link in invalid 👎", true);
   }, []);
 
   function flier(type, message, keep) {
@@ -68,7 +68,7 @@ export default function SignIn() {
     const confirmPassword = e.target.elements["confirm-password"].value;
 
     if (newPassword != confirmPassword)
-      return flier("error", "Password doesn't match");
+      return flier("error", "Password doesn't match 👎");
 
     setLoading(true);
 
@@ -78,7 +78,7 @@ export default function SignIn() {
         password: newPassword,
       });
       setLoading(false);
-      return flier("success", "Password changed successfully");
+      return flier("success", "Password changed successfully 😀");
     } catch (error) {
       setLoading(false);
       return flier("error", error.response.data.msg);

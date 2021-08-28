@@ -33,13 +33,13 @@ export default function Listing(props) {
       var url = new URL(data);
       return (
         <a href={data} target="_blank" rel="noreferrer">
-          {data}
+          🌐 {data}
         </a>
       );
     } catch (err) {
       const email =
         /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-      if (email.test(data)) return <a href={`mailto:${data}`}>{data}</a>;
+      if (email.test(data)) return <a href={`mailto:${data}`}>📧 {data}</a>;
       return data;
     }
   }

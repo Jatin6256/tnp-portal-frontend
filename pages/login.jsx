@@ -87,7 +87,7 @@ export default function SignInSide() {
   async function loginSubmit(e) {
     e.preventDefault();
     if (!RecaptchaRef.current.getValue())
-      return flier("warning", "Please fill the reCAPTCHA");
+      return flier("warning", "Please fill the reCAPTCHA 🥺");
 
     const { username, password } = e.target.elements;
     const g_recaptcha = RecaptchaRef.current.getValue();
@@ -103,12 +103,16 @@ export default function SignInSide() {
           g_recaptcha,
         }
       );
-      flier("success", `Welcome ${response.data.username}`);
+      flier("success", `Welcome ${response.data.username} 😀`);
       localStorage.setItem("user", JSON.stringify(response.data));
       localStorage.setItem("token", String(response.data.token));
       localStorage.setItem("userType", String(response.data.type));
-      Router.push("/");
       setLoading(false);
+      if (response.data.type === "COMPANY")
+        return Router.push("/dashboard/company/profile");
+      if (response.data.type === "STUDENT")
+        return Router.push("/dashboard/student/profile");
+      Router.push("/");
     } catch (err) {
       setLoading(false);
       return flier("error", err.response.data.msg);

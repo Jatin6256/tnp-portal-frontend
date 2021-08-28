@@ -69,7 +69,7 @@ export default function FullScreenDialog({
       await axiosUtil("/manager/student/enroll", "post", token, {
         positionId: data.id,
       });
-      return flier("success", "You've enrolled for this position.");
+      return flier("success", "You've enrolled for this position 😍");
     } catch (err) {
       return flier(
         "error",

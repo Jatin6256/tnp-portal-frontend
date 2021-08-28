@@ -66,10 +66,10 @@ export default function SignUp() {
     const { username, email } = e.target.elements;
 
     if (password != confirmPassword)
-      return flier("error", "Password doesn't match");
+      return flier("error", "Password doesn't match ❌");
 
     if (!RecaptchaRef.current.getValue())
-      return flier("info", "Please fill the reCAPTCHA");
+      return flier("warning", "Please fill the reCAPTCHA 🥺");
 
     const captchaValue = RecaptchaRef.current.getValue();
     RecaptchaRef.current.reset();
@@ -91,6 +91,7 @@ export default function SignUp() {
         `We've sent a verification email to you. Please verify your email and visit back to create your profile.`,
         true
       );
+      setTimeout(() => Router.push("/"), 5000);
       localStorage.setItem("user", JSON.stringify(response.data));
       localStorage.setItem("token", String(response.data.token));
       localStorage.setItem("userType", String(response.data.type));

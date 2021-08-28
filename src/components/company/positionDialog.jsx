@@ -83,7 +83,7 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
             change: { status: "CLOSED" },
           }
         );
-        return flier("success", "Position is set to `CLOSED`");
+        return flier("success", "Position is set to `CLOSED` ⚠");
       } catch (err) {
         return flier(
           "error",
@@ -102,7 +102,7 @@ export default function FullScreenDialog({ open, flier, handleClose, data }) {
         localStorage.getItem("token")
       );
       students = response.data.students;
-      if (students.length === 0) return flier("error", "No data available");
+      if (students.length === 0) return flier("error", "No data available 😕");
     } catch (err) {
       return flier(
         "error",

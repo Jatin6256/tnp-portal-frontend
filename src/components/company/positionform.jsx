@@ -72,7 +72,7 @@ export default function PositionForm(props) {
       const token = localStorage.getItem("token");
       await axiosUtil("/metadata/positions", "post", token, data);
       handleClose();
-      return flier("success", "Position created successfully");
+      return flier("success", "Position created successfully 😍");
     } catch (error) {
       return flier(
         "error",

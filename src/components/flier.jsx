@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     left: "50%",
     transform: "translateX(-50%)",
     margin: "auto",
-    minWidth: "80vw",
+    // minWidth: "80vw",
     maxWidth: "1200px",
     zIndex: 2000000,
   },

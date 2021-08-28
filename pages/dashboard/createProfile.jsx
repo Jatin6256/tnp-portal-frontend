@@ -5,7 +5,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Router from "next/router";
 import Head from "next/head";
-import Link from "../../src/components/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -74,7 +73,7 @@ export default function CreateProfile() {
         data,
         {}
       );
-      flier("success", `Your profile is created successfully.`);
+      flier("success", `Your profile is created successfully 🔥`);
     } catch (error) {
       return flier("error", error.response.data.msg);
     }

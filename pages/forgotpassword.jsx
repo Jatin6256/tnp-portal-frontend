@@ -60,7 +60,7 @@ export default function SignIn() {
     e.preventDefault();
     const email = document.getElementById("form-email").value;
     if (!RecaptchaRef.current.getValue())
-      return flier("info", "Please fill the reCAPTCHA");
+      return flier("warning", "Please fill the reCAPTCHA 🥺");
     const g_recaptcha = RecaptchaRef.current.getValue();
     RecaptchaRef.current.reset();
     setLoading(true);
