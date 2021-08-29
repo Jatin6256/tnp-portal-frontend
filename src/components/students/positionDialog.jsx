@@ -105,7 +105,9 @@ export default function FullScreenDialog({
           <DialogContent>
             <Box m={1}>
               <div className={classes.flex}>
-                <Typography variant="h3">{data.name}</Typography>
+                <Typography variant="h3">
+                  <b>{data.companyName}</b> - {data.name}
+                </Typography>
               </div>
             </Box>
             <Divider />
