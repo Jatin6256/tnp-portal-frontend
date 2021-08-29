@@ -89,9 +89,9 @@ export default function StudentSignUp() {
     try {
       const response = await axiosUtil(
         "/users/signup/studentwithgoogle",
-        null,
         "post",
-        data
+        data,
+        null
       );
       flier("success", `Your profile is create successfully.`, true);
       localStorage.setItem("user", JSON.stringify(response.data));

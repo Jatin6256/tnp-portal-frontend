@@ -115,7 +115,10 @@ export default function SignInSide() {
       Router.push("/");
     } catch (err) {
       setLoading(false);
-      return flier("error", err.response.data.msg);
+      return flier(
+        "error",
+        (err.response && err.response.data.msg) || err.message
+      );
     }
   }
 

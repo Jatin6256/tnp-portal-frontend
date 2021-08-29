@@ -62,6 +62,7 @@ export default function Positions() {
           positions.forEach((position) => {
             data.push({
               id: position.id,
+              Company: position.companyName,
               Name: position.name,
               Type: position.type,
               Location: position.location,
