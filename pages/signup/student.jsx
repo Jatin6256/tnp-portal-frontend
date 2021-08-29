@@ -90,6 +90,7 @@ export default function StudentSignUp() {
       const response = await axiosUtil(
         "/users/signup/studentwithgoogle",
         "post",
+        null,
         data,
         null
       );

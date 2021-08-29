@@ -74,6 +74,7 @@ export default function CreateProfile() {
         {}
       );
       flier("success", `Your profile is created successfully 🔥`);
+      setTimeout(() => Router.push("/dashboard/company/profile"), 5000);
     } catch (error) {
       return flier("error", error.response.data.msg);
     }
