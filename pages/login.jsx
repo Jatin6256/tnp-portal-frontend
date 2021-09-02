@@ -146,7 +146,7 @@ export default function SignInSide() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            <b>Sign in</b>
           </Typography>
           <form className={classes.form} onSubmit={loginSubmit}>
             <TextField
@@ -194,12 +194,17 @@ export default function SignInSide() {
             <Grid container>
               <Grid item xs>
                 <Link href="/forgotpassword" variant="body2">
-                  Forgot password?
+                  <b>Reset password</b>
+                </Link>
+              </Grid>
+              <Grid item xs>
+                <Link href="/signup" variant="body2">
+                  <b>Company Signup</b>
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/signup/student" variant="body2">
+                  <b>Student Signup</b>
                 </Link>
               </Grid>
             </Grid>

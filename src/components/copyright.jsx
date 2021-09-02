@@ -1,16 +1,29 @@
 import { Typography } from "@material-ui/core";
-import Link from "./Link";
 
 export default function Copyright() {
   return (
     <div style={{ margin: "20px" }}>
-      <Typography variant="body2" color="textSecondary" align="center">
+      <Typography variant="body2" color="inherit" align="center">
         {"Copyright © "}
-        <Link color="inherit" href="https://tnp.iiitr.ac.in/">
-          <a target="_blank" rel="noreferrer">Training and Placement Cell, IIIT Raichur</a>
-        </Link>{" "}
+        <a target="_blank" rel="noreferrer" href="https://tnp.iiitr.ac.in/">
+          <b>Training and Placement Cell, IIIT Raichur</b>
+        </a>{" "}
         {new Date().getFullYear()}
         {"."}
+      </Typography>
+      <Typography variant="body2" color="inherit" align="center" style={{marginTop: "10px"}}>
+        {"Made with ❤️ by "}
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://github.com/crossphoton"
+        >
+          <b>crossphoton</b>
+        </a>
+        {" & "}
+        <a target="_blank" rel="noreferrer" href="https://github.com/Jatin6256">
+          <b>Jatin6256</b>
+        </a>
       </Typography>
     </div>
   );

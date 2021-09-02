@@ -114,7 +114,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up - Company
+          Sign up - <b>Company</b>
         </Typography>
         <form className={classes.form} onSubmit={onFormSubmit}>
           <Grid container spacing={2}>
@@ -197,13 +197,6 @@ export default function SignUp() {
             <Grid item>
               <Link href="/login" variant="body2">
                 Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/signup/student" variant="body2">
-                Student Sign Up
               </Link>
             </Grid>
           </Grid>

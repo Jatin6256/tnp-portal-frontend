@@ -126,7 +126,7 @@ export default function StudentSignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign Up - Students
+            Sign Up - <b>Students</b>
           </Typography>
           <form
             className={classes.form}
