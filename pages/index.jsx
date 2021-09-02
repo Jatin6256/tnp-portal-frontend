@@ -1,6 +1,5 @@
 import Router from "next/router";
 import React from "react";
-import axiosUtil from "../src/utils/axios";
 import { LinearProgress, Typography, makeStyles } from "@material-ui/core";
 
 const style = makeStyles((theme) => {
@@ -20,6 +19,12 @@ const style = makeStyles((theme) => {
         padding: 2,
         margin: "10px 0px",
       },
+    },
+    float: {
+      position: "absolute",
+      bottom: "10vh",
+      right: "20vw",
+      cursor: "pointer",
     },
   };
 });
@@ -52,8 +57,17 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
+  function stuckRedirect() {
+    Router.push("/logout");
+  }
+
   return (
     <div className={classes.container}>
+      <div className={classes.float} onClick={stuckRedirect}>
+        <Typography color="secondary" variant="h6">
+          Stuck?
+        </Typography>
+      </div>
       <Typography color="primary" variant="h4" className={classes.boldHeadline}>
         Redirecting you to your destiny
       </Typography>
